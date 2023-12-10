@@ -54,6 +54,8 @@ BEGIN
         payload = EXCLUDED.payload,
         create_at = EXCLUDED.create_at;
 
+    DELETE FROM temp_events WHERE id = NEW.id;
+
     RETURN NEW;
 END;
 $$
