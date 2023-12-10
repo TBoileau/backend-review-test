@@ -28,6 +28,13 @@ RUN apk add --no-cache make
 RUN apk add --no-cache postgresql-dev bash \
     && docker-php-ext-install -j$(nproc) pdo_pgsql
 
+RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
+&& pecl install redis \
+&& docker-php-ext-enable redis.so
+
+# Set memory_limit to 2G
+RUN echo "memory_limit = 2G" > /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+
 # Installing Symfony CLI
 RUN apk add --no-cache bash && \
     curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash && \
