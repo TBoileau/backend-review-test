@@ -17,8 +17,7 @@ final class GHArchiveHandler implements GHArchiveHandlerInterface
         private readonly ExtractorInterface $extractor,
         private readonly TransformerInterface $transformer,
         private readonly LoaderInterface $loader
-    )
-    {
+    ) {
     }
 
     public function handle(string $date): void
@@ -31,9 +30,11 @@ final class GHArchiveHandler implements GHArchiveHandlerInterface
 
         foreach ($this->extractor->extract($input) as $filename) {
             foreach ($this->transformer->transform($filename) as $event) {
-                $this->loader->load($event);
+                $this->loader->register($event);
             }
             unlink($filename);
         }
+
+        $this->loader->load(true);
     }
 }

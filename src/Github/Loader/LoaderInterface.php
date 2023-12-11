@@ -28,5 +28,7 @@ interface LoaderInterface
      *          }
      *      } $event
      */
-    public function load(array $event): void;
+    public function register(array $event): void;
+
+    public function load(bool $force = false): void;
 }
