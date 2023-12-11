@@ -12,29 +12,26 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
+#[Route(path: '/api/search', name: 'api_search', methods: ['GET'])]
 final class SearchController extends AbstractController
 {
-    public function __construct(
-        private readonly ReadEventRepository $repository,
-        private readonly SerializerInterface $serializer
-    ) {
-    }
-
-    #[Route(path: '/api/search', name: 'api_search', methods: ['GET'])]
-    public function searchCommits(#[MapQueryString] SearchInput $searchInput): JsonResponse
-    {
-        $countByType = $this->repository->countByType($searchInput);
+    public function __invoke(
+        #[MapQueryString] SearchInput $searchInput,
+        ReadEventRepository $repository,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $countByType = $repository->countByType($searchInput);
 
         $this->json([
             'meta' => [
-                'totalEvents' => $this->repository->countAll($searchInput),
+                'totalEvents' => $repository->countAll($searchInput),
                 'totalPullRequests' => $countByType['pullRequest'] ?? 0,
                 'totalCommits' => $countByType['commit'] ?? 0,
                 'totalComments' => $countByType['comment'] ?? 0,
             ],
             'data' => [
-                'events' => $this->repository->getLatest($searchInput),
-                'stats' => $this->repository->statsByTypePerHour($searchInput)
+                'events' => $repository->getLatest($searchInput),
+                'stats' => $repository->statsByTypePerHour($searchInput)
             ]
         ]);
     }
