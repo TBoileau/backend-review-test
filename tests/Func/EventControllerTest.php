@@ -11,23 +11,11 @@ use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class EventControllerTest extends WebTestCase
 {
-    protected AbstractDatabaseTool $databaseTool;
     private static $client;
 
     protected function setUp(): void
     {
         static::$client = static::createClient();
-
-        $entityManager = static::getContainer()->get('doctrine.orm.entity_manager');
-        $metaData = $entityManager->getMetadataFactory()->getAllMetadata();
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->updateSchema($metaData);
-
-        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
-
-        $this->databaseTool->loadFixtures(
-            [EventFixtures::class]
-        );
     }
 
     public function testUpdateShouldReturnEmptyResponse()

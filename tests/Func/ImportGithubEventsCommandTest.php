@@ -23,13 +23,28 @@ final class ImportGithubEventsCommandTest extends KernelTestCase
 
         $commandTester->assertCommandIsSuccessful();
 
-        $container = static::getContainer();
-
-        /** @var EntityManagerInterface $entityManager */
-        $entityManager = $container->get('doctrine.orm.entity_manager');
-
-        $events = $entityManager->getRepository(Event::class)->findAll();
+        $events = $this->getEntityManager()->getRepository(Event::class)->findAll();
 
         self::assertCount(96, $events);
+    }
+
+    private function truncateEntities(array $entities)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $databasePlatform = $connection->getDatabasePlatform();
+
+        foreach ($entities as $entity) {
+            $query = $databasePlatform->getTruncateTableSQL(
+                $this->getEntityManager()->getClassMetadata($entity)->getTableName()
+            );
+            $connection->executeStatement($query . ' CASCADE');
+        }
+    }
+
+    private function getEntityManager(): EntityManagerInterface
+    {
+        return self::$kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
     }
 }
