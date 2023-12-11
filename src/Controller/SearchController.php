@@ -22,12 +22,12 @@ final class SearchController extends AbstractController
     ): JsonResponse {
         $countByType = $repository->countByType($searchInput);
 
-        $this->json([
+        return $this->json([
             'meta' => [
                 'totalEvents' => $repository->countAll($searchInput),
-                'totalPullRequests' => $countByType['pullRequest'] ?? 0,
-                'totalCommits' => $countByType['commit'] ?? 0,
-                'totalComments' => $countByType['comment'] ?? 0,
+                'totalPullRequests' => $countByType['PR'] ?? 0,
+                'totalCommits' => $countByType['COM'] ?? 0,
+                'totalComments' => $countByType['MSG'] ?? 0,
             ],
             'data' => [
                 'events' => $repository->getLatest($searchInput),

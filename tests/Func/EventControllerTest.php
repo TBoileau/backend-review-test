@@ -29,7 +29,7 @@ final class EventControllerTest extends WebTestCase
             sprintf('/api/event/%d/update', EventFixtures::EVENT_1_ID),
             [],
             [],
-            ['CONTENT_TYPE' => 'application/json'],
+            ['CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json'],
             json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!'])
         );
 
@@ -46,7 +46,7 @@ final class EventControllerTest extends WebTestCase
             sprintf('/api/event/%d/update', 7897897897),
             [],
             [],
-            ['CONTENT_TYPE' => 'application/json'],
+            ['CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json'],
             json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!'])
         );
 

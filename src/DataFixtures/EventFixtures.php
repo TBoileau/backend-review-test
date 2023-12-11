@@ -31,8 +31,8 @@ class EventFixtures extends Fixture
                 'yousign/test',
                 'https://api.github.com/repos/yousign/backend-test'
             ),
-            [],
-            new \DateTimeImmutable(),
+            ['comment' => 'Test comment'],
+            new \DateTimeImmutable('2023-01-01T12:00:00+00:00'),
             'Test comment initiate by fixture '
         );
 

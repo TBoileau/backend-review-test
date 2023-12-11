@@ -24,4 +24,9 @@ class EventType extends AbstractEnumType
         self::COMMENT => 'Comment',
         self::PULL_REQUEST => 'Pull Request',
     ];
+
+    public static function fromString(string $value): string
+    {
+        return self::$choices[$value];
+    }
 }

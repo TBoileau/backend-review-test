@@ -22,7 +22,7 @@ final class SearchControllerTest extends WebTestCase
         $client->request(
             'GET',
             '/api/search',
-            ['date' => '2021-01-01', 'keyword' => 'test'],
+            ['date' => '2023-01-01', 'keyword' => 'Test'],
             [],
             ['CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json'],
         );
@@ -31,18 +31,27 @@ final class SearchControllerTest extends WebTestCase
 
         $response = json_decode($client->getResponse()->getContent(), true);
 
-        self::assertSame([
+        $expectedResponse = [
             'meta' => [
-                'totalEvents' => 0,
+                'totalEvents' => 1,
                 'totalPullRequests' => 0,
                 'totalCommits' => 0,
-                'totalComments' => 0,
+                'totalComments' => 1,
             ],
             'data' => [
-                'events' => [],
+                'events' => [
+                    [
+                        'type' => 'MSG',
+                        'payload' => ['comment' => 'Test comment']
+                    ]
+                ],
                 'stats' => array_fill(0, 24, ['commit' => 0, 'pullRequest' => 0, 'comment' => 0])
             ]
-        ], $response);
+        ];
+
+        $expectedResponse['data']['stats'][12]['comment'] = 1;
+
+        self::assertEquals($expectedResponse, $response);
     }
 
     public function testUpdateShouldReturnHttpNotFoundResponse()
