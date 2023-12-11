@@ -4,33 +4,29 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-/**
- * @ORM\Entity()
- * @ORM\Table(name="actor")
- */
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Table;
+
+#[Entity]
+#[Table(name: 'actor')]
 class Actor
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[Id]
+    #[Column(type: Types::BIGINT)]
+    #[GeneratedValue(strategy: 'NONE')]
     public int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[Column]
     public string $login;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[Column]
     public string $url;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[Column]
     public string $avatarUrl;
 
     public function __construct(int $id, string $login, string $url, string $avatarUrl)
@@ -61,15 +57,4 @@ class Actor
     {
         return $this->avatarUrl;
     }
-
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (int) $data['id'],
-            $data['login'],
-            $data['url'],
-            $data['avatar_url']
-        );
-    }
-
 }
