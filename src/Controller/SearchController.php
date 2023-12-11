@@ -24,9 +24,7 @@ final class SearchController extends AbstractController
         $this->serializer = $serializer;
     }
 
-    /**
-     * @Route(path="/api/search", name="api_search", methods={"GET"})
-     */
+    #[Route(path: '/api/search', name: 'api_search', methods: ['GET'])]
     public function searchCommits(#[MapQueryString] SearchInput $searchInput): JsonResponse
     {
         $countByType = $this->repository->countByType($searchInput);
