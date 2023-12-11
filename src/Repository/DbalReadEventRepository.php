@@ -88,19 +88,4 @@ SQL;
 
         return $result;
     }
-
-    public function exist(int $id): bool
-    {
-        $sql = <<<SQL
-            SELECT 1
-            FROM event
-            WHERE id = :id
-        SQL;
-
-        $result = $this->connection->fetchOne($sql, [
-            'id' => $id
-        ]);
-
-        return (bool) $result;
-    }
 }
