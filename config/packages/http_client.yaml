@@ -3,3 +3,8 @@ framework:
     scoped_clients:
       gharchive.client:
         base_uri: 'https://data.gharchive.org'
+
+when@test:
+  framework:
+    http_client:
+      mock_response_factory: App\Tests\Func\MockGHArchiveClientCallback
