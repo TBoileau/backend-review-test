@@ -31,23 +31,23 @@ final class GHArchiveExtractor implements ExtractorInterface
                     ],
                 ]
             );
+        }
 
-            foreach ($this->gharchiveClient->stream($responses) as $response => $chunk) {
-                if ($chunk->isLast()) {
-                    if (Response::HTTP_OK !== $response->getStatusCode()) {
-                        continue;
-                    }
-
-                    $url = $response->getInfo('url');
-
-                    $filename = sprintf('%s/%s', sys_get_temp_dir(), basename($url));
-
-                    (new Filesystem())->dumpFile($filename, $response->getContent());
-
-                    yield $filename;
-
-                    unset($response, $chunk, $url, $filename);
+        foreach ($this->gharchiveClient->stream($responses) as $response => $chunk) {
+            if ($chunk->isLast()) {
+                if (Response::HTTP_OK !== $response->getStatusCode()) {
+                    continue;
                 }
+
+                $url = $response->getInfo('url');
+
+                $filename = sprintf('%s/%s', sys_get_temp_dir(), basename($url));
+
+                (new Filesystem())->dumpFile($filename, $response->getContent());
+
+                yield $filename;
+
+                unset($response, $chunk, $url, $filename);
             }
         }
     }
