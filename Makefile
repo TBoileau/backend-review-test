@@ -96,6 +96,7 @@ db-test: var/docker.build
 	@$(PHP_RUN) bin/console --env=test -v -n doctrine:database:drop --if-exists --force
 	@$(PHP_RUN) bin/console --env=test -v -n doctrine:database:create
 	@$(PHP_RUN) bin/console --env=test -v -n doctrine:migration:migrate --allow-no-migration
+	@$(PHP_RUN) bin/console --env=test -v -n doctrine:fixtures:load
 	@$(call log_success,Done)
 
 .PHONY: unit-test

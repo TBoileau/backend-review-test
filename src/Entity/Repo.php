@@ -4,29 +4,26 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Table;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="repo")
- */
+#[Entity]
+#[Table(name: 'repo')]
 class Repo
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[Id]
+    #[Column(type: Types::BIGINT)]
+    #[GeneratedValue(strategy: 'NONE')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[Column]
     public string $name;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[Column]
     public string $url;
 
     public function __construct(int $id, string $name, string $url)
@@ -49,14 +46,5 @@ class Repo
     public function url(): string
     {
         return $this->url;
-    }
-
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (int) $data['id'],
-            $data['name'],
-            $data['url']
-        );
     }
 }

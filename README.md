@@ -22,6 +22,8 @@ App\Command\ImportGitHubEventsCommand
 
 API contract and entities are already done. But feel free to adapt the code as you like.
 
+Find out more about this command [here](docs/events_import_command.md)
+
 ### Refactor the project
 
 :point_right: **Nice to have**

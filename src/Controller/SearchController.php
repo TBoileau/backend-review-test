@@ -1,50 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Dto\SearchInput;
 use App\Repository\ReadEventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class SearchController
+#[Route(path: '/api/search', name: 'api_search', methods: ['GET'])]
+final class SearchController extends AbstractController
 {
-    private ReadEventRepository $repository;
-    private SerializerInterface $serializer;
-
-    public function __construct(
+    public function __invoke(
+        #[MapQueryString] SearchInput $searchInput,
         ReadEventRepository $repository,
-        SerializerInterface  $serializer
-    ) {
-        $this->repository = $repository;
-        $this->serializer = $serializer;
-    }
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $countByType = $repository->countByType($searchInput);
 
-    /**
-     * @Route(path="/api/search", name="api_search", methods={"GET"})
-     */
-    public function searchCommits(Request $request): JsonResponse
-    {
-        $searchInput = $this->serializer->denormalize($request->query->all(), SearchInput::class);
-
-        $countByType = $this->repository->countByType($searchInput);
-
-        $data = [
+        return $this->json([
             'meta' => [
-                'totalEvents' => $this->repository->countAll($searchInput),
-                'totalPullRequests' => $countByType['pullRequest'] ?? 0,
-                'totalCommits' => $countByType['commit'] ?? 0,
-                'totalComments' => $countByType['comment'] ?? 0,
+                'totalEvents' => $repository->countAll($searchInput),
+                'totalPullRequests' => $countByType['PR'] ?? 0,
+                'totalCommits' => $countByType['COM'] ?? 0,
+                'totalComments' => $countByType['MSG'] ?? 0,
             ],
             'data' => [
-                'events' => $this->repository->getLatest($searchInput),
-                'stats' => $this->repository->statsByTypePerHour($searchInput)
+                'events' => $repository->getLatest($searchInput),
+                'stats' => $repository->statsByTypePerHour($searchInput)
             ]
-        ];
-
-        return new JsonResponse($data);
+        ]);
     }
 }
