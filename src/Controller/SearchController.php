@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
+use App\Controller\AbstractControllertractController as AbstractControllertractControllerAlias;
 use App\Dto\SearchInput;
 use App\Repository\ReadEventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class SearchController
+final class SearchController extends AbstractController
 {
     private ReadEventRepository $repository;
     private SerializerInterface $serializer;
@@ -31,7 +31,7 @@ class SearchController
     {
         $countByType = $this->repository->countByType($searchInput);
 
-        $data = [
+        $this->json([
             'meta' => [
                 'totalEvents' => $this->repository->countAll($searchInput),
                 'totalPullRequests' => $countByType['pullRequest'] ?? 0,
@@ -42,8 +42,6 @@ class SearchController
                 'events' => $this->repository->getLatest($searchInput),
                 'stats' => $this->repository->statsByTypePerHour($searchInput)
             ]
-        ];
-
-        return new JsonResponse($data);
+        ]);
     }
 }
