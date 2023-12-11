@@ -33,26 +33,15 @@ BEGIN
     
     INSERT INTO actor (id, login, url, avatar_url)
     VALUES (NEW.actor_id, NEW.actor_login, NEW.actor_url, NEW.actor_avatar_url)
-    ON CONFLICT (id) DO UPDATE SET
-        login = EXCLUDED.login,
-        url = EXCLUDED.url,
-        avatar_url = EXCLUDED.avatar_url;
+    ON CONFLICT (id) DO NOTHING;
 
     INSERT INTO repo (id, name, url)
     VALUES (NEW.repo_id, NEW.repo_name, NEW.repo_url)
-    ON CONFLICT (id) DO UPDATE SET
-        name = EXCLUDED.name,
-        url = EXCLUDED.url;
+    ON CONFLICT (id) DO NOTHING;
 
     INSERT INTO "event" (id, actor_id, repo_id, type, count, payload, create_at, comment)
     VALUES (NEW.event_id, NEW.actor_id, NEW.repo_id, NEW.type, NEW.count, NEW.payload, NEW.created_at, null)
-    ON CONFLICT (id) DO UPDATE SET
-        actor_id = EXCLUDED.actor_id,
-        repo_id = EXCLUDED.repo_id,
-        type = EXCLUDED.type,
-        count = EXCLUDED.count,
-        payload = EXCLUDED.payload,
-        create_at = EXCLUDED.create_at;
+    ON CONFLICT (id) DO NOTHING;
 
     DELETE FROM temp_events WHERE id = NEW.id;
 
