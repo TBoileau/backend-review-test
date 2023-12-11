@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Controller\AbstractControllertractController as AbstractControllertractControllerAlias;
 use App\Dto\SearchInput;
 use App\Repository\ReadEventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
