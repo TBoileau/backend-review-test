@@ -13,15 +13,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class SearchController extends AbstractController
 {
-    private ReadEventRepository $repository;
-    private SerializerInterface $serializer;
-
     public function __construct(
-        ReadEventRepository $repository,
-        SerializerInterface  $serializer
+        private readonly ReadEventRepository $repository,
+        private readonly SerializerInterface $serializer
     ) {
-        $this->repository = $repository;
-        $this->serializer = $serializer;
     }
 
     #[Route(path: '/api/search', name: 'api_search', methods: ['GET'])]
