@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Dto\SearchInput;
@@ -7,7 +9,7 @@ use App\Entity\EventType;
 use Doctrine\DBAL\Connection;
 use function Symfony\Component\String\u;
 
-class DbalReadEventRepository implements ReadEventRepository
+final class DbalReadEventRepository implements ReadEventRepository
 {
     private Connection $connection;
 
